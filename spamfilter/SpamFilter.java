@@ -68,7 +68,7 @@ public class SpamFilter {
         for(String word: this.hamMessages) this.calculateProbabilityAndUpdate(word);
     }
    
-    void calculateProbabilityAndUpdate(String word)
+    private void calculateProbabilityAndUpdate(String word)
     {
         /*
         calculation of p(word/spam)
