@@ -29,7 +29,7 @@ class BagOfWords
 	 * A setter to set the message
 	 * @param message The actual message to be processed.
 	 */
-	void setMessage(String message)
+	public void setMessage(String message)
 	{
 		this.message = message;
 	}
@@ -38,7 +38,7 @@ class BagOfWords
 	 * A getter to get the message
 	 * @return message to be processed
 	 */
-	String getMessage()
+	public String getMessage()
 	{
 		return this.message;
 	}
@@ -47,7 +47,7 @@ class BagOfWords
 	 * This method is used to remove the linking words in the String to get a pure Bag of Words
 	 * @throws NullPointerException this will be thrown if the input message is null
 	 */
-	void processMessage() throws NullPointerException
+	public void processMessage() throws NullPointerException
 	{
 		String[] words = this.message.split(" ");
 		for(String word : words)
@@ -61,7 +61,7 @@ class BagOfWords
 	 * This method is used to return the bag of words
 	 * @return Will return the bag of words
 	 */
-	ArrayList<String> getBagOfWords()
+	public ArrayList<String> getBagOfWords()
 	{
 		return this.bagOfWords;
 	}
