@@ -7,11 +7,10 @@ package spamfilter;
  
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
  
 /**
  *
- * @author Visweswaran Nagasivam
+ * @author student
  */
 public class SpamFilter {
     // ======================= TRAINING DATA =====================
@@ -35,17 +34,17 @@ public class SpamFilter {
         this.hamProbabilityForWord = new HashMap<String, Double>();
     }
    
-    void resetTotalMsgCount()
+    private void resetTotalMsgCount()
     {
         this.totalMessags = this.hamMessages.size() + this.spamMessages.size();
     }
    
-    void resetSpamMsgCount()
+    private void resetSpamMsgCount()
     {
         this.totalHamMessages = this.hamMessages.size();
     }
    
-    void resetHamMsgCount()
+    private void resetHamMsgCount()
     {
         this.totalHamMessages = this.hamMessages.size();
     }
@@ -124,7 +123,7 @@ public class SpamFilter {
         return count;
     }
    
-    void updateSpamProbability(String word, Double probability)
+    private void updateSpamProbability(String word, Double probability)
     {
         if(this.spamProbabilityForWord.containsKey(word))
         {
@@ -134,7 +133,7 @@ public class SpamFilter {
         else this.spamProbabilityForWord.put(word, probability);
     }
    
-    void updateHamProbability(String word, Double probability)
+    private void updateHamProbability(String word, Double probability)
     {
         if(this.hamProbabilityForWord.containsKey(word))
         {
@@ -144,7 +143,7 @@ public class SpamFilter {
         else this.hamProbabilityForWord.put(word, probability);
     }
    
-    Double getSpamProbabilityForMessage(String message)
+    public Double getSpamProbabilityForMessage(String message)
     {
         BagOfWords words = new BagOfWords();
         words.setMessage(message);
@@ -166,8 +165,6 @@ public class SpamFilter {
                 spamProbabilities.add(this.spamProbabilityForWord.get(wordInMessage));
             } else spamProbabilities.add(0.0);
         }
-		// p(W/S) == pOfWByS
-		// p(H/S) == pOfHByS
         double pOfWByS = 0.0;
         double pOfWByH = 0.0;
         for(Double i : spamProbabilities) pOfWByS+=i;
