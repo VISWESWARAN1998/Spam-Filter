@@ -10,35 +10,32 @@ import java.util.HashMap;
  
 /**
  *
- * @author student
+ * @author Visweswaran Nagasivam
  */
 public class SpamFilter {
     // ======================= TRAINING DATA =====================
     private ArrayList<String> spamMessages = null;
     private ArrayList<String> hamMessages = null;
-    private Integer totalMessags;
     private Integer totalSpamMessages;
     private Integer totalHamMessages;
     private HashMap<String, Double> spamProbabilityForWord = null;
     private HashMap<String, Double> hamProbabilityForWord = null;
    
+    /**
+     * A constructor to load the spam words and ham words
+     * @param spamMessages could be anything spam words / financial words/ marketing words which is applied to filter
+     * @param hamMessages  the list of good words
+     */
     public SpamFilter(ArrayList<String> spamMessages, ArrayList<String> hamMessages)
     {
         this.spamMessages = spamMessages;
         this.hamMessages = hamMessages;
-        // Total messages =  no. of ham messages + no. of spam messages
-        this.totalMessags = this.hamMessages.size() + this.spamMessages.size();
         this.totalHamMessages = this.hamMessages.size();
         this.totalSpamMessages = this.spamMessages.size();
         this.spamProbabilityForWord = new HashMap<String, Double>();
         this.hamProbabilityForWord = new HashMap<String, Double>();
     }
-   
-    private void resetTotalMsgCount()
-    {
-        this.totalMessags = this.hamMessages.size() + this.spamMessages.size();
-    }
-   
+      
     private void resetSpamMsgCount()
     {
         this.totalHamMessages = this.hamMessages.size();
@@ -50,12 +47,11 @@ public class SpamFilter {
     }
    
     /**
-     *
+     * A method which is used to learn from your messages
      * @throws java.lang.ArithmeticException will throw either spam / ham training data is empty
      */
-    void learn() throws ArithmeticException
+    public void learn() throws ArithmeticException
     {
-        resetTotalMsgCount();
         resetSpamMsgCount();
         resetHamMsgCount();
         
@@ -70,27 +66,24 @@ public class SpamFilter {
             this.calculateProbabilityAndUpdate(word);
         }
         for(String word: this.hamMessages) this.calculateProbabilityAndUpdate(word);
-        // At this moment we have learned the spam & ham probability of all words
-        System.out.println(this.spamProbabilityForWord);
-        System.out.println(this.hamProbabilityForWord);
     }
    
     void calculateProbabilityAndUpdate(String word)
     {
+        /*
+        calculation of p(word/spam)
+        */
         int countOfWordInSpam = getWordCountInSpam(word);
-        System.out.println("Spam: " + word+ " "+countOfWordInSpam);
         Double pOfWordSpam = (double) countOfWordInSpam /this.totalSpamMessages;
-        System.out.println("p(spam) = "+pOfWordSpam);
         this.updateSpamProbability(word, pOfWordSpam);
+        System.out.println("p("+word+"/spam) = "+pOfWordSpam);
         int countOfWordInHam = getWordCountInHam(word);
-        System.out.println("Ham: " + word+ " "+countOfWordInHam);
         Double pOfWordHam = (double) countOfWordInHam /this.totalHamMessages;
-        System.out.println("p(ham) = "+pOfWordHam);
         this.updateHamProbability(word, pOfWordHam);
+        System.out.println("p("+word+"/ham) = "+pOfWordHam);
     }
    
     /**
-     *
      * @param word The word for which the count is to be identified
      * @return returns the no of times the "word" is present in HamMessages
      */
@@ -123,6 +116,17 @@ public class SpamFilter {
         return count;
     }
    
+    /**
+     * This method is used to update the spam table which is nothing but a hash map
+     * e.g spam table
+     * ================================
+     * word          ||  probability
+     * ================================
+     * million       || 0.7
+     * ================================
+     * @param word The spam word
+     * @param probability The probability of the spam word
+     */
     private void updateSpamProbability(String word, Double probability)
     {
         if(this.spamProbabilityForWord.containsKey(word))
@@ -133,6 +137,17 @@ public class SpamFilter {
         else this.spamProbabilityForWord.put(word, probability);
     }
    
+    /**
+     * This method is used to update the ham table which is nothing but a hash map
+     * e.g ham table
+     * ================================
+     * word          ||  probability
+     * ================================
+     * bank          || 0.7
+     * ================================
+     * @param word The spam word
+     * @param probability The probability of the spam word
+     * */
     private void updateHamProbability(String word, Double probability)
     {
         if(this.hamProbabilityForWord.containsKey(word))
@@ -142,14 +157,17 @@ public class SpamFilter {
         }
         else this.hamProbabilityForWord.put(word, probability);
     }
-   
+    
+    /**
+     * @param message The input message for which you need to get the probability
+     * @return spam probability which ranges between 0.0 to 1.0
+     */
     public Double getSpamProbabilityForMessage(String message)
     {
         BagOfWords words = new BagOfWords();
         words.setMessage(message);
         words.processMessage();
         ArrayList<String> wordsInMessage = words.getBagOfWords();
-        int totalWordsInMsg = wordsInMessage.size();
         ArrayList<Double> hamProbabilities = new ArrayList<Double>();
         ArrayList<Double> spamProbabilities = new ArrayList<Double>();
         double probability = 0.0;
